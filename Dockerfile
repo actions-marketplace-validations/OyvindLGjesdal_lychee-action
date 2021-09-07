@@ -9,7 +9,7 @@ LABEL com.github.actions.description="Quickly check links in Markdown, HTML, and
 LABEL com.github.actions.icon="external-link"
 LABEL com.github.actions.color="purple"
 
-RUN sudo apt-get install -y ca-certificates
+RUN apt-get install -y ca-certificates
 
 COPY README.md /
 COPY LICENSE-MIT LICENSE-APACHE /
