@@ -5,8 +5,6 @@ LYCHEE_OUT=${LYCHEE_OUT:="lychee/out.md"}
 LYCHEE_TMP="/tmp/lychee/out.md"
 GITHUB_WORKFLOW_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}?check_suite_focus=true"
 
-# install ca-certs
-sudo apt-get install -y ca-certificates
 # Create temp dir
 mkdir -p "$(dirname $LYCHEE_TMP)"
 
