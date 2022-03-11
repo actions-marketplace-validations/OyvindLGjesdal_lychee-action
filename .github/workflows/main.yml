@@ -1,15 +1,48 @@
-on: [push]
+on: 
+  - repository_dispatch
+  - workflow_dispatch
+  - push
+  - pull_request
 
 jobs:
   lychee-action:
     runs-on: ubuntu-latest
+    continue-on-error: true
     name: Test the lychee link checker action
     steps:
       # To use this repository's private action,
-      # you must check out the repository
+      # we must check out the repository
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: link checking
-        uses: ./ # Uses an action in the root directory
+        uses: actions/checkout@a12a3943b4bdde767164f792f33f40b04645d846
+      # `lycheeverse/lychee-action@...` gets classified as an e-mail address,
+      # causing this test to fail.
+      # TODO: Reactive once this issue is fixed upstream:
+      # https://github.com/robinst/linkify/issues/29
+      #- name: test defaults
+      #  uses: ./
+      #  with:
+      #    fail: true
+      - name: test globs
+        uses: ./
+        with:
+          args: --exclude-mail --verbose --no-progress './**/*.md' './**/*.html'
+          fail: true
+      - name: test workflow inputs
+        uses: ./
         with:
           args: -v fixtures/TEST.md
+          format: json
+          output: /tmp/foo.json
+          fail: true
+      - name: directory
+        uses: ./
+        with:
+          args: --exclude-mail .
+          fail: true
+      - name: test format override
+        uses: ./
+        with:
+          args: --format markdown -v fixtures/TEST.md
+          format: doesnotexist # gets ignored if format set in args
+          output: /tmp/foo.txt
+          fail: true
